@@ -19,4 +19,4 @@ O projeto utiliza **Node.js**, **Prisma ORM** e **MySQL**, seguindo boas prátic
 - [Node.js](https://nodejs.org/)
 - [Express.js](https://expressjs.com/)
 - [Prisma ORM](https://www.prisma.io/)
-- [MySQL](https://www.mysql.com/) ou outro banco de dados suportado
+- [MySQL](https://www.mysql.com/)
