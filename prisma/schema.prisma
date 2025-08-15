@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model cliente {
+  i_cliente_cliente Int         @id @default(autoincrement())
+  s_nome_cliente    String?     @db.VarChar(30)
+  s_cpf_cliente     String      @db.VarChar(11)
+  d_nasc_cliente    DateTime?   @db.DateTime(0)
+  i_tipo_cliente    Int
+  tipocliente       tipocliente @relation(fields: [i_tipo_cliente], references: [i_tipocliente_tipocliente], onDelete: NoAction, onUpdate: NoAction, map: "fk_tipocliente")
+  venda             venda[]
+
+  @@index([i_tipo_cliente], map: "fk_tipocliente")
+}
+
+model cliente_aux {
+  i_cliente_cliente Int         @id @default(autoincrement())
+  s_nome_cliente    String?     @db.VarChar(30)
+  s_cpf_cliente     String      @db.VarChar(11)
+  d_nasc_cliente    DateTime?   @db.DateTime(0)
+  i_tipo_cliente    Int
+  tipocliente       tipocliente @relation(fields: [i_tipo_cliente], references: [i_tipocliente_tipocliente], onDelete: NoAction, onUpdate: NoAction, map: "fk_tipocliente_aux")
+
+  @@index([i_tipo_cliente], map: "fk_tipocliente")
+}
+
+model tipocliente {
+  i_tipocliente_tipocliente    Int           @id @default(autoincrement())
+  s_dsctipocliente_tipocliente String        @db.VarChar(100)
+  cliente                      cliente[]
+  cliente_aux                  cliente_aux[]
+}
+
+model venda {
+  i_venda_venda     Int       @id @default(autoincrement())
+  d_data_venda      DateTime? @db.DateTime(0)
+  f_valor_venda     Float?    @db.Float
+  i_cliente_cliente Int?
+  cliente           cliente?  @relation(fields: [i_cliente_cliente], references: [i_cliente_cliente], onDelete: NoAction, onUpdate: NoAction, map: "fk_cliente_venda")
+
+  @@index([i_cliente_cliente], map: "fk_cliente_venda")
+}
