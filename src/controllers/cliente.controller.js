@@ -1,3 +1,5 @@
+//Recebimento de requisições HTTP e devolução de respostas HTTP
+
 const clienteService = require('../services/cliente.service');
 
 class ClienteController{

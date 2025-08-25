@@ -1,3 +1,5 @@
+//Aplicar das regras de negócio, validar dados e tratar erros de negócio
+
 const clienteRepository = require("../repositories/cliente.repository");
 
 class ClienteService{
