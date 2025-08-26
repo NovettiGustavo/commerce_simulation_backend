@@ -28,8 +28,22 @@ class ClienteController{
 
     async createCliente(req,res){
         try{
+            const {s_nome_cliente,s_cpf_cliente,d_nasc_cliente,i_tipo_cliente} = req.body;
 
+            if(!s_nome_cliente || !s_cpf_cliente){
+                return res.status(400).json({message: "Name and CPF required!"})
+            }
+
+            const newCliente = await clienteService.createCliente({
+                s_nome_cliente,
+                s_cpf_cliente,
+                d_nasc_cliente,
+                i_tipo_cliente
+            })
+
+            return res.status(201).json(newCliente)
         }catch(error){
+            console.error("Error create cliente:", error.message)
             return res.status(500).json({error:error.message})
         }
     }
