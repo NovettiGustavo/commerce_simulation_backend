@@ -9,7 +9,7 @@ class ClienteController{
              const cliente = await clienteService.getClienteById(Number(id));
 
              if(!cliente){
-                return res.status(400).json({error: "Cliente não encontrado"})
+                return res.status(400).json({error: "Cliente not founded"})
              }
              return res.status(200).json(cliente)
         }catch(error){

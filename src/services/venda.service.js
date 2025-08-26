@@ -25,3 +25,5 @@ class vendaService{
         return vendas;
     }
 }
+
+module.exports = new vendaService();
