@@ -20,7 +20,7 @@ class vendaService{
     }
 
     async getAllVendas(){
-        const vendas = await vendaRepository.prisma.findAll();
+        const vendas = await vendaRepository.findAll();
 
         return vendas;
     }

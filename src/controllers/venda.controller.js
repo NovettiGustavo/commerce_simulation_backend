@@ -16,7 +16,7 @@ class VendaController{
         }
     }
 
-    async getAllVendas(res){
+    async getAllVendas(req,res){
         try{
             const vendas = await vendaService.getAllVendas();
             
