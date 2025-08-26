@@ -22,10 +22,6 @@ class TipoClienteService {
     async getAllTipoClientes() {
         const tipoClientes = await tipoClienteRepository.findAll();
 
-        if (tipoClientes.length === 0) {
-            throw new Error("No TipoCliente found in database");
-        }
-
         return tipoClientes;
     }
 }
