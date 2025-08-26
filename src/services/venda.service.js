@@ -22,6 +22,9 @@ class vendaService{
     async getAllVendas(){
         const vendas = await vendaRepository.findAll();
 
+         if(vendas.length === 0){
+            throw new Error("No vendas founded in database")
+        }
         return vendas;
     }
 }

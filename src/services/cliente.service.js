@@ -21,6 +21,9 @@ class ClienteService{
     async getAllClientes(){
         const clientes = await clienteRepository.findAll();
 
+         if(clientes.length === 0){
+            throw new Error("No clientes founded in database")
+        }
         return clientes;
     }
 }
