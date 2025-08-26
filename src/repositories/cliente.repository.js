@@ -21,6 +21,23 @@ class ClienteRepository {
 
         return allClientes;
     }
+
+    async createCliente(data){
+        try{
+            const newCliente = await this.prisma.cliente.create({
+                data:{
+                    s_nome_cliente: data.s_nome_cliente,
+                    s_cpf_cliente: data.s_cpf_cliente,
+                    d_nasc_cliente: data.d_nasc_cliente,
+                    i_tipo_cliente: data.i_tipo_cliente
+                }
+            })
+            return newCliente
+        }catch(error){
+            console.error("Error create customer",error.message);
+            throw new Error("Database error on createCliente")
+        }
+    }
 };
 
 module.exports = new ClienteRepository(prisma)
