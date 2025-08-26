@@ -28,7 +28,7 @@ class ClienteRepository {
                 data:{
                     s_nome_cliente: data.s_nome_cliente,
                     s_cpf_cliente: data.s_cpf_cliente,
-                    d_nasc_cliente: data.d_nasc_cliente,
+                    d_nasc_cliente: data.d_nasc_cliente ? new Date(data.d_nasc_cliente) : null,
                     i_tipo_cliente: data.i_tipo_cliente
                 }
             })
