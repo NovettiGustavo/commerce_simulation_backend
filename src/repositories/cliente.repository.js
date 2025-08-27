@@ -37,6 +37,20 @@ class ClienteRepository {
             console.error("Error create customer",error.message);
             throw new Error("Database error on createCliente")
         }
+    };
+
+    async updateCliente(id, data){
+        try{
+            const updateCliente = await this.prisma.cliente.update({
+                where:{i_cliente_cliente:id},
+                data:{...data}
+            })
+
+            return updateCliente;
+        }catch(error){
+            console.error("Error updating cliente in database", error.message);
+            throw new Error("Database error on update cliente");
+        }
     }
 };
 

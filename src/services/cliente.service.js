@@ -50,6 +50,32 @@ class ClienteService {
             throw new Error("Error createCliente on cliente.service",error.message);
         }
     }
+
+    async updateCliente(id,data){
+        try{
+            if(!id){
+                throw new Error("ID is required to update Cliente")
+            }
+
+            const clienteExist = await clienteRepository.findClienteById(id);
+            if(!clienteExist){
+                throw new Error("Cliente not found")
+            }
+
+            if(data.i_tipocliente_tipocliente){
+                const tipoClienteExist = await tipoClienteRepository.findTipoClienteById(data.i_tipocliente_tipocliente)
+
+                if(!tipoClienteExist){
+                    throw new Error("Send a valid tipocliente to update")
+                }
+            }
+
+            const updatedCliente = await clienteRepository.updateCliente(id,data);
+            return updatedCliente;
+        }catch(error){
+            throw new Error("Error on updateLCiente in service",error.message)
+        }
+    }
 }
 
 module.exports = new ClienteService();
