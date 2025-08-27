@@ -30,6 +30,25 @@ class TipoClienteController {
         }
 
     };
+
+    async createTipoCliente(req,res){
+        const {s_dsctipocliente_tipocliente} = req.body;
+
+        try{
+            if(!s_dsctipocliente_tipocliente){
+                return res.status(400).json({message:"Description is required"})
+            }
+
+            const newTipoCliente = await tipoClienteService.createTipoCliente({
+                s_dsctipocliente_tipocliente
+            })
+
+            return res.status(201).json(newTipoCliente)
+        }catch(error){
+            console.error("Internal server error on create tipocliente",error.message);
+            return res.status(500).json({message: error.message})
+        }
+    }
 }
 
 module.exports = new TipoClienteController()
