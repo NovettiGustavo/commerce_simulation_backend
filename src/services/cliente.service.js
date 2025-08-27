@@ -47,7 +47,7 @@ class ClienteService {
 
             return newCliente;
         } catch (error) {
-            throw new Error(error.message);
+            throw new Error("Error createCliente on cliente.service",error.message);
         }
     }
 }

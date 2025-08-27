@@ -59,7 +59,7 @@ class vendaService {
 
             return newVenda;
         } catch (error){
-            throw new Error(error.message)
+            throw new Error("Error createVenda on venda.service",error.message)
         }
     }
 }
