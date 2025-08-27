@@ -33,6 +33,21 @@ class TipoClienteRepository{
         })
 
         return tipoClientes;
+    };
+
+    async createTipoCliente(data){
+        try{
+            const newTipoCliente = await this.prisma.tipocliente.create({
+                data:{
+                    s_dsctipocliente_tipocliente: data.s_dsctipocliente_tipocliente
+                }
+            })
+
+            return newTipoCliente;
+        }catch(error){
+            console.error("Error create new tipoCliente", error.message);
+            throw new Error("Database error on create tipoCliente");
+        }
     }
 }
 
