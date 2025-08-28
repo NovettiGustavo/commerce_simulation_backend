@@ -52,6 +52,28 @@ class VendaController {
             return res.status(500).json({error:error.message})
         }
     }
+
+    async updateVenda(req,res){
+        const {id} = req.params;
+        const {data} = req.body;
+
+        try{
+            if(!id){
+                return res.status(400).json({message:"Missing ID parameter"})
+            }
+
+            if(!data || Object.keys(data).length === 0){
+                return res.status(400).json({message: "No data founded to update venda"})
+            }
+
+            const updatedVenda = await vendaService.updateVenda(Number(id),data);
+            return res.status(200).json(updatedVenda)
+
+        }catch(error){
+            console.error(`Error on update venda in controller:${error.message}`);
+            return res.status(500).json({message:"Internal server error"})
+        }
+    }
 }
 
 module.exports = new VendaController()

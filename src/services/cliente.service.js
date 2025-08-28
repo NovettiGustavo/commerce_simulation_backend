@@ -73,7 +73,7 @@ class ClienteService {
             const updatedCliente = await clienteRepository.updateCliente(id,data);
             return updatedCliente;
         }catch(error){
-            throw new Error("Error on updateLCiente in service",error.message)
+            throw new Error("Error on updateCliente in service",error.message)
         }
     }
 }

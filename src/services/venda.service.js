@@ -62,6 +62,33 @@ class vendaService {
             throw new Error("Error createVenda on venda.service",error.message)
         }
     }
+
+    async updateVenda(id,data){
+        try{
+            if(!id){
+                throw new Error("ID is required param to update venda")
+            }
+            
+            const vendaExist = await vendaRepository.findVendaById(id);
+            if(!vendaExist){
+                throw new Error("Venda not found")
+            }
+
+            if(data.i_cliente_cliente){
+                const clienteExist = await clienteRepository.findClienteById(data.i_cliente_cliente);
+                if(!clienteExist){
+                    throw new Error("Cliente not found")
+                }
+            }
+
+            const updatedVenda = await vendaRepository.updateVenda(id,data);
+            return updatedVenda;
+
+            
+        }catch(error){
+            throw new Error(`Error on update venda in service: ${error.message}`)
+        }
+    }
 }
 
 module.exports = new vendaService();

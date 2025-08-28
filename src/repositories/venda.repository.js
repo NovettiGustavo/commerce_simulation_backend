@@ -51,6 +51,20 @@ class VendaRepository {
             console.error("Error create venda", error.message);
             throw new Error("Error on create venda on database")
         }
+    };
+
+    async updateVenda(id, data){
+        try{
+            const updatedVenda = await this.prisma.venda.update({
+                where: {i_venda_venda: id},
+                data:{...data}
+            })
+
+            return updatedVenda
+        }catch(error){
+            console.error("Error updating venda in database", error.message);
+            throw new Error("Database error on update venda")
+        }
     }
 
 }
