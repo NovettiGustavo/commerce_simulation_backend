@@ -39,53 +39,63 @@ class vendaService {
             }
 
             const valorVenda = Number(f_valor_venda);
-            if(isNaN(valorVenda)){
+            if (isNaN(valorVenda)) {
                 throw new Error("Sales value must be a valid number");
             }
 
-            if(isNaN(new Date(d_data_venda).getDate())){
+            if (isNaN(new Date(d_data_venda).getDate())) {
                 throw new Error("Sale date invalid!");
             }
 
             const cliente = await clienteRepository.findClienteById(i_cliente_cliente);
-            if(!cliente){
+            if (!cliente) {
                 throw new Error("Cliente not found!")
             }
 
             const newVenda = await vendaRepository.createVenda({
                 ...data,
-               f_valor_venda: valorVenda
+                f_valor_venda: valorVenda
             })
 
             return newVenda;
-        } catch (error){
-            throw new Error("Error createVenda on venda.service",error.message)
+        } catch (error) {
+            throw new Error("Error createVenda on venda.service", error.message)
         }
     }
 
-    async updateVenda(id,data){
-        try{
-            if(!id){
+    async updateVenda(id, data) {
+        try {
+            if (!id) {
                 throw new Error("ID is required param to update venda")
             }
-            
+
             const vendaExist = await vendaRepository.findVendaById(id);
-            if(!vendaExist){
+            if (!vendaExist) {
                 throw new Error("Venda not found")
             }
 
-            if(data.i_cliente_cliente){
+            if (data.i_cliente_cliente) {
                 const clienteExist = await clienteRepository.findClienteById(data.i_cliente_cliente);
-                if(!clienteExist){
+                if (!clienteExist) {
                     throw new Error("Cliente not found")
                 }
             }
 
-            const updatedVenda = await vendaRepository.updateVenda(id,data);
+            if (data.d_data_venda) {
+                const parsedDate = new Date(data.d_data_venda);
+
+                if (isNaN(parsedDate.getDate())) {
+                    throw new Error("Expected ISO-8601 DateTime format")
+                }
+
+                data.d_data_venda = parsedDate;
+            }
+
+            const updatedVenda = await vendaRepository.updateVenda(id, data);
             return updatedVenda;
 
-            
-        }catch(error){
+
+        } catch (error) {
             throw new Error(`Error on update venda in service: ${error.message}`)
         }
     }

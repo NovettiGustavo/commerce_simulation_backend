@@ -66,16 +66,6 @@ class VendaController {
                 return res.status(400).json({ message: "No data founded to update venda" })
             }
 
-            if (data.d_data_venda) {
-                const parsedDate = new Date(data.d_data_venda);
-
-                if (isNaN(parsedDate.getDate())) {
-                    throw new Error("Expected ISO-8601 DateTime format")
-                }
-
-                data.d_data_venda = parsedDate;
-            }
-
             const updatedVenda = await vendaService.updateVenda(Number(id), data);
             return res.status(200).json(updatedVenda)
 
