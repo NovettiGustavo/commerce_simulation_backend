@@ -32,12 +32,12 @@ class VendaController {
     }
 
     async createVenda(req, res) {
-        
+
         try {
             const { d_data_venda, f_valor_venda, i_cliente_cliente } = req.body;
 
-            if(!d_data_venda || !f_valor_venda || !i_cliente_cliente){
-                return res.status(400).json({message: "Missing required fields on create Venda!"});
+            if (!d_data_venda || !f_valor_venda || !i_cliente_cliente) {
+                return res.status(400).json({ message: "Missing required fields on create Venda!" });
             }
 
             const newVenda = await vendaService.createVenda({
@@ -47,31 +47,41 @@ class VendaController {
             })
 
             return res.status(201).json(newVenda);
-        }catch(error){
+        } catch (error) {
             console.error("Error on HTTP method to create venda:", error.message);
-            return res.status(500).json({error:error.message})
+            return res.status(500).json({ error: error.message })
         }
     }
 
-    async updateVenda(req,res){
-        const {id} = req.params;
-        const {data} = req.body;
+    async updateVenda(req, res) {
+        const { id } = req.params;
+        const { data } = req.body;
 
-        try{
-            if(!id){
-                return res.status(400).json({message:"Missing ID parameter"})
+        try {
+            if (!id) {
+                return res.status(400).json({ message: "Missing ID parameter" })
             }
 
-            if(!data || Object.keys(data).length === 0){
-                return res.status(400).json({message: "No data founded to update venda"})
+            if (!data || Object.keys(data).length === 0) {
+                return res.status(400).json({ message: "No data founded to update venda" })
             }
 
-            const updatedVenda = await vendaService.updateVenda(Number(id),data);
+            if (data.d_data_venda) {
+                const parsedDate = new Date(data.d_data_venda);
+
+                if (isNaN(parsedDate.getDate())) {
+                    throw new Error("Expected ISO-8601 DateTime format")
+                }
+
+                data.d_data_venda = parsedDate;
+            }
+
+            const updatedVenda = await vendaService.updateVenda(Number(id), data);
             return res.status(200).json(updatedVenda)
 
-        }catch(error){
+        } catch (error) {
             console.error(`Error on update venda in controller:${error.message}`);
-            return res.status(500).json({message:"Internal server error"})
+            return res.status(500).json({ message: "Internal server error" })
         }
     }
 }
