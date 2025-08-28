@@ -49,6 +49,21 @@ class TipoClienteRepository{
             throw new Error("Database error on create tipoCliente");
         }
     }
+
+    async updateTipoCliente(id,data){
+        try{
+            const updatedTipoCliente = await this.prisma.tipocliente.update({
+                where:{i_tipocliente_tipocliente: id},
+                data:{...data}
+            });
+
+            return updatedTipoCliente;
+
+        }catch(error){
+            console.error(`Error updating tipocliente in database ${error.message}`);
+            throw new Error("Database error on update tipocliente")
+        }
+    }
 }
 
 module.exports = new TipoClienteRepository(prisma)

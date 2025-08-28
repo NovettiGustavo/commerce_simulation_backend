@@ -42,6 +42,26 @@ class TipoClienteService {
             console.error("Error in TipoCliente Service:", error.message);
             throw new Error("Failed to create TipoCliente");
         }
+    };
+
+    async updateTipoCliente(id,data){
+        try{
+            if(!id){
+                throw new Error("ID is required param to update tipocliente")
+            }
+
+            const tipoClienteExist = await tipoClienteRepository.findTipoClienteById(id);
+
+            if(!tipoClienteExist){
+                throw new Error("tipocliente not found");
+            }
+
+            const updatedTipoCliente = await tipoClienteRepository.updateTipoCliente(id, data);
+            return updatedTipoCliente;
+
+        }catch(error){
+            throw new Error(`Error updating tipocliente in service: ${error.message}`)
+        }
     }
 
 }
