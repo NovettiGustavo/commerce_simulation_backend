@@ -66,7 +66,23 @@ class ClienteController {
             console.error("Error updating cliente", error.message);
             return res.status(500).json({error: error.message})
         }
+    }
 
+    async deleteCliente(req,res){
+        const {id} = req.params;
+
+        try{
+            if(!id){
+                return res.status(400).json({message: "ID is required param to delete a cliente"})
+            }
+
+            const deletedCliente = await clienteService.deleteCliente(Number(id));
+            return res.status(200).json(deletedCliente)
+
+        }catch(error){
+            console.error("Error deleting cliente",error.message);
+            return res.status(500).json({error:error.message})
+        }
     }
 }
 

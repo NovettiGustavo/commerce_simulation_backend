@@ -6,13 +6,13 @@ const tipoClienteRepository = require("../repositories/tipoCliente.repository");
 class ClienteService {
     async getClienteById(id) {
         if (!id) {
-            throw new Error("Id")
+            throw new Error("Id parameter is required to get cliente")
         }
 
         const cliente = await clienteRepository.findClienteById(id);
 
         if (!cliente) {
-            throw new Error("Cliente nou founded")
+            throw new Error("Cliente not founded")
         }
 
         return cliente;
@@ -26,7 +26,7 @@ class ClienteService {
     }
 
     async createCliente(data) {
-        const { s_nome_cliente, s_cpf_cliente, d_nasc_cliente, i_tipo_cliente } = data;
+        const { s_nome_cliente, s_cpf_cliente } = data;
         let tipoClienteId = data.i_tipo_cliente || 1;
         try {
             if (!s_nome_cliente || !s_cpf_cliente) {
@@ -74,6 +74,30 @@ class ClienteService {
             return updatedCliente;
         }catch(error){
             throw new Error("Error on updateCliente in service",error.message)
+        }
+    };
+
+    async deleteCliente(id){
+        try{
+            if(!id){
+                throw new Error("ID is required to delete cliente")
+            }
+
+            const cliente = await clienteRepository.findClienteById(id)
+
+            if(!cliente){
+                throw new Error("Cliente not found")
+            }
+
+            if(!cliente.is_active){
+                throw new Error("Cliente is already deactivated")
+            }
+
+            const deletedCliente = await clienteRepository.deleteCliente(id);
+            return deletedCliente;
+        }catch(error){
+           console.error("Error on delete cliente in service:", error.message);
+           throw new Error(`Error on delete cliente in service: ${error.message}`);
         }
     }
 }

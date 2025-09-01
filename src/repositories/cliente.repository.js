@@ -7,8 +7,10 @@ class ClienteRepository {
         this.prisma = prismaClient
     }
     async findClienteById(id) {
-        const cliente = await this.prisma.cliente.findUnique({
-            where:{i_cliente_cliente: id},
+        const cliente = await this.prisma.cliente.findFirst({
+            where:{i_cliente_cliente: id,
+                is_active:true
+            },
             include:{tipocliente: true}
         })
         return cliente;
@@ -16,6 +18,7 @@ class ClienteRepository {
 
     async findAll(){
         const allClientes = await this.prisma.cliente.findMany({
+            where:{is_active:true},
             include:{tipocliente:true}
         });
 
@@ -29,7 +32,7 @@ class ClienteRepository {
                     s_nome_cliente: data.s_nome_cliente,
                     s_cpf_cliente: data.s_cpf_cliente,
                     d_nasc_cliente: data.d_nasc_cliente ? new Date(data.d_nasc_cliente) : null,
-                    i_tipo_cliente: data.i_tipo_cliente
+                    i_tipo_cliente: data.i_tipo_cliente,
                 }
             })
             return newCliente
@@ -43,13 +46,35 @@ class ClienteRepository {
         try{
             const updateCliente = await this.prisma.cliente.update({
                 where:{i_cliente_cliente:id},
-                data:{...data}
+                data:{...data,
+                    updated_at:new Date()
+                }
             })
 
             return updateCliente;
         }catch(error){
             console.error("Error updating cliente in database", error.message);
             throw new Error("Database error on update cliente");
+        }
+    };
+
+    async deleteCliente(id){
+        try{
+            const softDeletedCliente = await this.prisma.cliente.update({
+                where:{
+                    i_cliente_cliente: id
+                },
+                data:{
+                    is_active:false,
+                    deleted_at:new Date(),
+                    updated_at: new Date()
+                }
+            })
+
+            return softDeletedCliente;
+        }catch(error){
+            console.error(`Error soft deleting cliente on database ${error.message}`);
+            throw new Error("Database error on soft delete cliente")
         }
     }
 };
