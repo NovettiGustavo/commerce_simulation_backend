@@ -73,6 +73,20 @@ class VendaController {
             console.error(`Error on update venda in controller:${error.message}`);
             return res.status(500).json({ message: "Internal server error" })
         }
+    };
+
+    async deleteVenda(req,res){
+        const {id} = req.params
+
+        try{
+            if(!id) return res.status(400).json({message: "ID is required param to delete a sale"});
+
+            const deletedVenda = await vendaService.deleteVenda(id);
+             return res.status(200).json(deletedVenda)
+        }catch(error){
+             console.error("Error deleting venda",error.message);
+            return res.status(500).json({error:error.message})
+        }
     }
 }
 

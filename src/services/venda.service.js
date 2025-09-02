@@ -1,6 +1,8 @@
 const clienteRepository = require("../repositories/cliente.repository");
 const vendaRepository = require("../repositories/venda.repository");
 
+
+
 class vendaService {
     async getVendaById(id) {
         if (!id) {
@@ -97,6 +99,27 @@ class vendaService {
 
         } catch (error) {
             throw new Error(`Error on update venda in service: ${error.message}`)
+        }
+    };
+
+    async deleteVenda(id) {
+        const oneYearAgo = new Date();
+        oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1)
+        try {
+            if (!id) {
+                throw new Error("ID is required to delete venda")
+            }
+
+            const venda = await vendaRepository.findVendaById(id)
+
+            validateDataVendaForDelete(venda, oneYearAgo)
+
+            const deletedVenda = await vendaRepository.deleteVenda(id);
+            return deletedVenda;
+
+        } catch (error) {
+            console.error("Error on delete venda in service:", error.message);
+            throw new Error(`Error on delete venda in service: ${error.message}`);
         }
     }
 }
