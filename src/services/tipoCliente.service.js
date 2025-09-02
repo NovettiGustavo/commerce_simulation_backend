@@ -62,6 +62,27 @@ class TipoClienteService {
         }catch(error){
             throw new Error(`Error updating tipocliente in service: ${error.message}`)
         }
+    };
+
+    async deleteTipoCliente(id){
+        try{
+            if(!id)  throw new Error("ID is required to delete tipocliente");
+
+            const tipoCliente = await tipoClienteRepository.findTipoClienteById(id)
+
+            if(!tipoCliente) throw new Error("tipocliente not found in the database");
+
+            const clientes = await clienteRepository.findClienteByTipo(id);
+
+            if(clientes.length > 0)  throw new Error("TipoCliente is in use by clients and cannot be deleted");
+
+            const deletedTipoCliente = await tipoClienteRepository.deleteTipoCliente(id);
+            return deletedTipoCliente;
+
+        }catch(error){
+             console.error("Error on delete tipocliente in service:", error.message);
+            throw new Error(`Error on delete tipocliente in service: ${error.message}`);
+        }
     }
 
 }

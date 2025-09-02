@@ -16,6 +16,17 @@ class ClienteRepository {
         return cliente;
     }
 
+    async findClienteByTipo(idType){
+        const cliente = await this.prisma.cliente.findMany({
+            where:{
+                i_tipo_cliente: idType,
+                is_active:true
+            }
+        });
+
+        return cliente;
+    }
+
     async findAll(){
         const allClientes = await this.prisma.cliente.findMany({
             where:{is_active:true},

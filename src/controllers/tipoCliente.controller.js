@@ -69,6 +69,20 @@ class TipoClienteController {
             console.error(`Error on update tipocliente in controller: ${error.message}`);
             return res.status(500).json({message:"Internal server error"});
         }
+    };
+
+    async deleteTipoCliente(req,res){
+        const {id} = req.params;
+
+        try{
+            if(!id)  return res.status(400).json({message: "ID is required param to delete a tipocliente"});
+
+            const deletedTipoCliente = await tipoClienteService.deleteTipoCliente(id);
+            return res.status(200).json(deletedTipoCliente)
+        }catch(error){
+             console.error(`Error deleting venda: ${error.message}`);
+            return res.status(500).json({error:error.message})
+        }
     }
 }
 

@@ -63,6 +63,21 @@ class TipoClienteRepository{
             console.error(`Error updating tipocliente in database ${error.message}`);
             throw new Error("Database error on update tipocliente")
         }
+    };
+
+    async deleteTipoCliente(id){
+        try{
+            const deletedTipoCliente = await this.prisma.tipocliente.delete({
+                where:{
+                    i_tipocliente_tipocliente:id
+                }
+            })
+
+            return deletedTipoCliente;
+        }catch(error){
+            console.error(`Error soft deleting tipocliente on database ${error.message}`);
+            throw new Error("Database error on soft delete tipocliente")
+        }
     }
 }
 
