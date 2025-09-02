@@ -14,7 +14,7 @@ app.use("/vendas", vendaRoutes);
 app.use("/tipoclientes", tipoClienteRoutes);
 
 app.get("/", (req, res) =>{
-    res.send("API ok");
+    res.send("API running");
 })
 
 module.exports = app;
