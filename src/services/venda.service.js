@@ -1,6 +1,6 @@
 const clienteRepository = require("../repositories/cliente.repository");
 const vendaRepository = require("../repositories/venda.repository");
-
+const VendaValidator = require("../utils/validator/venda/venda_validator")
 
 
 class vendaService {
@@ -29,71 +29,28 @@ class vendaService {
     }
 
     async createVenda(data) {
-        const { d_data_venda, f_valor_venda, i_cliente_cliente } = data;
-
         try {
-            if (!d_data_venda || !f_valor_venda) {
-                throw new Error("Missing required fields")
-            }
-
-            if (!i_cliente_cliente) {
-                throw new Error("A sale can only be created associated with an customer")
-            }
-
-            const valorVenda = Number(f_valor_venda);
-            if (isNaN(valorVenda)) {
-                throw new Error("Sales value must be a valid number");
-            }
-
-            if (isNaN(new Date(d_data_venda).getDate())) {
-                throw new Error("Sale date invalid!");
-            }
-
-            const cliente = await clienteRepository.findClienteById(i_cliente_cliente);
+            const validatedData = VendaValidator.validadeCreate(data)
+            const cliente = await clienteRepository.findClienteById(validadeCreate.i_cliente_cliente);
             if (!cliente) {
                 throw new Error("Cliente not found!")
             }
 
-            const newVenda = await vendaRepository.createVenda({
-                ...data,
-                f_valor_venda: valorVenda
-            })
+            const newVenda = await vendaRepository.createVenda(validatedData)
 
             return newVenda;
         } catch (error) {
-            throw new Error("Error createVenda on venda.service", error.message)
+           console.error("Error createVenda on venda.service:", error.message);
+           throw new Error(`Error createVenda on venda.service: ${error.message}`);
         }
     }
 
     async updateVenda(id, data) {
         try {
-            if (!id) {
-                throw new Error("ID is required param to update venda")
-            }
-
-            const vendaExist = await vendaRepository.findVendaById(id);
-            if (!vendaExist) {
-                throw new Error("Venda not found")
-            }
-
-            if (data.i_cliente_cliente) {
-                const clienteExist = await clienteRepository.findClienteById(data.i_cliente_cliente);
-                if (!clienteExist) {
-                    throw new Error("Cliente not found")
-                }
-            }
-
-            if (data.d_data_venda) {
-                const parsedDate = new Date(data.d_data_venda);
-
-                if (isNaN(parsedDate.getDate())) {
-                    throw new Error("Expected ISO-8601 DateTime format")
-                }
-
-                data.d_data_venda = parsedDate;
-            }
-
-            const updatedVenda = await vendaRepository.updateVenda(id, data);
+           
+           const validatedData = await VendaValidator.validateUpdate(id,data) 
+            
+            const updatedVenda = await vendaRepository.updateVenda(id,validatedData);
             return updatedVenda;
 
 
@@ -112,7 +69,7 @@ class vendaService {
 
             const venda = await vendaRepository.findVendaById(id)
 
-            validateDataVendaForDelete(venda, oneYearAgo)
+            VendaValidator.validateDelete(venda, oneYearAgo)
 
             const deletedVenda = await vendaRepository.deleteVenda(id);
             return deletedVenda;
