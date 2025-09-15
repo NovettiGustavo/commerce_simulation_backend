@@ -2,6 +2,7 @@
 
 const clienteRepository = require("../repositories/cliente.repository");
 const tipoClienteRepository = require("../repositories/tipoCliente.repository");
+const ClienteValidator = require("../utils/validator/cliente/cliente-validator")
 
 class ClienteService {
     async getClienteById(id) {
@@ -26,78 +27,45 @@ class ClienteService {
     }
 
     async createCliente(data) {
-        const { s_nome_cliente, s_cpf_cliente } = data;
-        let tipoClienteId = data.i_tipo_cliente || 1;
+
         try {
-            if (!s_nome_cliente || !s_cpf_cliente) {
-                throw new Error("Missing required fields")
-            }
+            const validatedData = await ClienteValidator.validateCreate(data);
 
-            if (tipoClienteId !== 1) {
-                const type = await tipoClienteRepository.findTipoClienteById(tipoClienteId)
-                if (!type) {
-                    throw new Error("tipoCliente not found!")
-                }
-            }
 
-            const newCliente = await clienteRepository.createCliente({
-                ...data,
-                i_tipo_cliente: tipoClienteId
-            })
+            const newCliente = await clienteRepository.createCliente(
+                validatedData
+            )
 
             return newCliente;
         } catch (error) {
-            throw new Error("Error createCliente on cliente.service",error.message);
+            console.error("Error createCliente on cliente.service:", error.message);
+            throw new Error(`Error createCliente on cliente.service: ${error.message}`);
+
         }
     }
 
-    async updateCliente(id,data){
-        try{
-            if(!id){
-                throw new Error("ID is required to update Cliente")
-            }
+    async updateCliente(id, data) {
+        try {
+            const validatedData = await ClienteValidator.validateUpdate(id, data)
 
-            const clienteExist = await clienteRepository.findClienteById(id);
-            if(!clienteExist){
-                throw new Error("Cliente not found")
-            }
-
-            if(data.i_tipocliente_tipocliente){
-                const tipoClienteExist = await tipoClienteRepository.findTipoClienteById(data.i_tipocliente_tipocliente)
-
-                if(!tipoClienteExist){
-                    throw new Error("Send a valid tipocliente to update")
-                }
-            }
-
-            const updatedCliente = await clienteRepository.updateCliente(id,data);
+            const updatedCliente = await clienteRepository.updateCliente(id, validatedData);
             return updatedCliente;
-        }catch(error){
-            throw new Error("Error on updateCliente in service",error.message)
+        } catch (error) {
+            console.error("Error on updateCliente in service:", error.message);
+            throw new Error(`Error on updateCliente in service: ${error.message}`);
+
         }
     };
 
-    async deleteCliente(id){
-        try{
-            if(!id){
-                throw new Error("ID is required to delete cliente")
-            }
+    async deleteCliente(id) {
+        try {
+           const validatedData = await ClienteValidator.validateDelete(id)
 
-            const cliente = await clienteRepository.findClienteById(id)
-
-            if(!cliente){
-                throw new Error("Cliente not found")
-            }
-
-            if(!cliente.is_active){
-                throw new Error("Cliente is already deactivated")
-            }
-
-            const deletedCliente = await clienteRepository.deleteCliente(id);
+            const deletedCliente = await clienteRepository.deleteCliente(validatedData.i_cliente_cliente);
             return deletedCliente;
-        }catch(error){
-           console.error("Error on delete cliente in service:", error.message);
-           throw new Error(`Error on delete cliente in service: ${error.message}`);
+        } catch (error) {
+            console.error("Error on delete cliente in service:", error.message);
+            throw new Error(`Error on delete cliente in service: ${error.message}`);
         }
     }
 }

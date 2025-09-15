@@ -17,6 +17,8 @@ class VendaValidator {
         if (venda.d_data_venda <= oneYearAgo) {
             throw new Error("Sales from one year ago cannot be excluded.")
         }
+
+        return venda;
     };
 
     static validadeCreate(data) {

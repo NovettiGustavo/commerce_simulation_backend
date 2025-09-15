@@ -31,7 +31,7 @@ class vendaService {
     async createVenda(data) {
         try {
             const validatedData = VendaValidator.validadeCreate(data)
-            const cliente = await clienteRepository.findClienteById(validadeCreate.i_cliente_cliente);
+            const cliente = await clienteRepository.findClienteById(validatedData.i_cliente_cliente);
             if (!cliente) {
                 throw new Error("Cliente not found!")
             }
