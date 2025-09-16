@@ -1,6 +1,5 @@
-const tipoClienteRepository = require("../repositories/tipoCliente.repository");
-const TipoClienteValidator = require("../utils/validator/tipo_cliente/tipoCliente_validator")
-const clienteRepository = require("../repositories/cliente.repository");
+const tipoClienteRepository = require("@repositories/tipoCliente.repository");
+const TipoClienteValidator = require("@validators/tipo_cliente/tipoCliente_validator")
 
 class TipoClienteService {
     async getTipoClienteById(id) {

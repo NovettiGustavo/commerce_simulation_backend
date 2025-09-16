@@ -1,6 +1,6 @@
 //Recebimento de requisições HTTP e devolução de respostas HTTP
 
-const clienteService = require('../services/cliente.service');
+const clienteService = require('@services/cliente.service');
 
 class ClienteController {
     async getClienteById(req, res) {

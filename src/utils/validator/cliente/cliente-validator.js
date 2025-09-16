@@ -1,5 +1,5 @@
-const tipoClienteRepository = require("../repositories/tipoCliente.repository");
-const clienteRepository = require("../repositories/cliente.repository");
+const tipoClienteRepository = require("@repositories/tipoCliente.repository");
+const clienteRepository = require("@repositories/cliente.repository");
 
 class ClienteValidator {
     static async validateCreate(data) {
@@ -64,4 +64,4 @@ class ClienteValidator {
     }
 }
 
-module.exports = new ClienteValidator()
+module.exports = ClienteValidator

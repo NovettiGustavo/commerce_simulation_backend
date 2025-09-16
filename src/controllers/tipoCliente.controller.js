@@ -1,4 +1,4 @@
-const tipoClienteService = require("../services/tipoCliente.service");
+const tipoClienteService = require("@services/tipoCliente.service");
 
 class TipoClienteController {
     async getTipoClienteById(req, res) {

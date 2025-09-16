@@ -1,6 +1,6 @@
-const clienteRepository = require("../repositories/cliente.repository");
-const vendaRepository = require("../repositories/venda.repository");
-const VendaValidator = require("../utils/validator/venda/venda_validator")
+const clienteRepository = require("@repositories/cliente.repository");
+const vendaRepository = require("@repositories/venda.repository");
+const VendaValidator = require("@validators/venda/venda_validator")
 
 
 class vendaService {

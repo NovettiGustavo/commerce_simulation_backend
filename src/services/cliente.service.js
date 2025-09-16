@@ -1,7 +1,7 @@
 //Aplicar das regras de negócio, validar dados e tratar erros de negócio
 
-const clienteRepository = require("../repositories/cliente.repository");
-const ClienteValidator = require("../utils/validator/cliente/cliente-validator")
+const clienteRepository = require("@repositories/cliente.repository");
+const ClienteValidator = require("@validators/cliente/cliente-validator")
 
 class ClienteService {
     async getClienteById(id) {

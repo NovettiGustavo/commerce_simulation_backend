@@ -1,4 +1,4 @@
-const vendaService = require("../services/venda.service")
+const vendaService = require("@services/venda.service")
 
 class VendaController {
     async getVendaById(req, res) {

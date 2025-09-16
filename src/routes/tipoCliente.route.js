@@ -1,5 +1,5 @@
 const express = require("express");
-const tipoClienteController = require("../controllers/tipoCliente.controller");
+const tipoClienteController = require("@controllers/tipoCliente.controller");
 
 const router = express.Router();
 

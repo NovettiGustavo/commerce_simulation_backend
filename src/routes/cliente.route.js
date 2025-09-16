@@ -1,7 +1,7 @@
 //Mapeamento de URL
 
 const express = require("express");
-const clienteController = require("../controllers/cliente.controller");
+const clienteController = require("@controllers/cliente.controller");
 
 const router = express.Router();
 

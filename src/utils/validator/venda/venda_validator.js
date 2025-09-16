@@ -1,5 +1,5 @@
-const clienteRepository = require("../repositories/cliente.repository");
-const vendaRepository = require("../repositories/venda.repository");
+const clienteRepository = require("@repositories/cliente.repository");
+const vendaRepository = require("@repositories/venda.repository");
 
 class VendaValidator {
     static validateDelete(venda, oneYearAgo) {
@@ -77,22 +77,3 @@ class VendaValidator {
 
 module.exports = VendaValidator;
 
-
-
-/* validateDataVendaForDelete(venda, oneYearAgo) {
-        if (!venda) {
-            throw new Error("Venda not found");
-        }
-
-        if (!venda.is_active) {
-            throw new Error("venda is already deactivated")
-        }
-
-        if (!venda.d_data_venda) {
-            throw new Error("Sale date is required for deletion")
-        }
-        if (venda.d_data_venda <= oneYearAgo) {
-            throw new Error("Sales from one year ago cannot be excluded.")
-        }
-
-    }*/
