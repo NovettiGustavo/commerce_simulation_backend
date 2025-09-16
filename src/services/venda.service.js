@@ -5,27 +5,39 @@ const VendaValidator = require("../utils/validator/venda/venda_validator")
 
 class vendaService {
     async getVendaById(id) {
-        if (!id) {
-            throw new Error("Missign id");
+        try {
+            if (!id) {
+                throw new Error("Missign id");
+            }
+
+            const venda = await vendaRepository.findVendaById(id);
+
+            if (!venda) {
+                throw new Error("Venda not founded!");
+            }
+
+            if (!venda.cliente) {
+                throw new Error("Venda does not have an associated cliente")
+            }
+
+            return venda;
+        } catch (error) {
+            console.error("Error in Venda Service:", error.message);
+            throw new Error("Failed to get Venda by id");
         }
 
-        const venda = await vendaRepository.findVendaById(id);
-
-        if (!venda) {
-            throw new Error("Venda not founded!");
-        }
-
-        if (!venda.cliente) {
-            throw new Error("Venda does not have an associated cliente")
-        }
-
-        return venda;
     }
 
     async getAllVendas() {
-        const vendas = await vendaRepository.findAll();
+        try {
+            const vendas = await vendaRepository.findAll();
 
-        return vendas;
+            return vendas;
+        } catch (error) {
+            console.error("Error in Venda Service:", error.message);
+            throw new Error("Failed to get all Venda");
+        }
+
     }
 
     async createVenda(data) {
@@ -40,17 +52,17 @@ class vendaService {
 
             return newVenda;
         } catch (error) {
-           console.error("Error createVenda on venda.service:", error.message);
-           throw new Error(`Error createVenda on venda.service: ${error.message}`);
+            console.error("Error createVenda on venda.service:", error.message);
+            throw new Error(`Error createVenda on venda.service: ${error.message}`);
         }
     }
 
     async updateVenda(id, data) {
         try {
-           
-           const validatedData = await VendaValidator.validateUpdate(id,data) 
-            
-            const updatedVenda = await vendaRepository.updateVenda(id,validatedData);
+
+            const validatedData = await VendaValidator.validateUpdate(id, data)
+
+            const updatedVenda = await vendaRepository.updateVenda(id, validatedData);
             return updatedVenda;
 
 

@@ -1,86 +1,68 @@
 const tipoClienteRepository = require("../repositories/tipoCliente.repository");
+const TipoClienteValidator = require("../utils/validator/tipo_cliente/tipoCliente_validator")
+const clienteRepository = require("../repositories/cliente.repository");
 
 class TipoClienteService {
     async getTipoClienteById(id) {
-        if (!id) {
-            throw new Error("Missing id parameter");
+        try {
+            const validatedData = await TipoClienteValidator.validateGetById(id)
+
+            return validatedData;
+        } catch (error) {
+            console.error("Error in TipoCliente Service:", error.message);
+            throw new Error(`Failed to get TipoCliente by id: ${error.message}`);
         }
 
-        const tipoCliente = await tipoClienteRepository.findTipoClienteById(id);
-
-        if (!tipoCliente) {
-            throw new Error("TipoCliente not found!");
-        }
-
-        if (tipoCliente.cliente.length === 0) {
-            throw new Error("TipoCliente does not have any associated clients");
-        }
-
-        return tipoCliente;
     }
 
     async getAllTipoClientes() {
-        const tipoClientes = await tipoClienteRepository.findAll();
+        try {
+            const tipoClientes = await tipoClienteRepository.findAll();
 
-        return tipoClientes;
+            return tipoClientes;
+        } catch (error) {
+            console.error("Error in TipoCliente Service:", error.message);
+            throw new Error("Failed to get all TipoCliente");
+        }
+
     }
 
     async createTipoCliente(data) {
-        const { s_dsctipocliente_tipocliente } = data;
+        
 
         try {
-            if (!s_dsctipocliente_tipocliente) {
-                throw new Error("tipoCliente description is required")
-            }
-
-            const newTipoCliente = await tipoClienteRepository.createTipoCliente({
-                ...data
-            })
+           const validatedData = await TipoClienteValidator.validateCreate(data);
+            const newTipoCliente = await tipoClienteRepository.createTipoCliente(
+                validatedData
+            )
 
             return newTipoCliente
         } catch (error) {
             console.error("Error in TipoCliente Service:", error.message);
-            throw new Error("Failed to create TipoCliente");
+            throw new Error(`Failed to create TipoCliente: ${error.message}`);
         }
     };
 
-    async updateTipoCliente(id,data){
-        try{
-            if(!id){
-                throw new Error("ID is required param to update tipocliente")
-            }
-
-            const tipoClienteExist = await tipoClienteRepository.findTipoClienteById(id);
-
-            if(!tipoClienteExist){
-                throw new Error("tipocliente not found");
-            }
-
-            const updatedTipoCliente = await tipoClienteRepository.updateTipoCliente(id, data);
+    async updateTipoCliente(id,data) {
+        try {
+            const validatedData = await TipoClienteValidator.validateUpdate(id,data)
+            const updatedTipoCliente = await tipoClienteRepository.updateTipoCliente(id, validatedData);
             return updatedTipoCliente;
 
-        }catch(error){
+        } catch (error) {
             throw new Error(`Error updating tipocliente in service: ${error.message}`)
         }
     };
 
-    async deleteTipoCliente(id){
-        try{
-            if(!id)  throw new Error("ID is required to delete tipocliente");
-
-            const tipoCliente = await tipoClienteRepository.findTipoClienteById(id)
-
-            if(!tipoCliente) throw new Error("tipocliente not found in the database");
-
-            const clientes = await clienteRepository.findClienteByTipo(id);
-
-            if(clientes.length > 0)  throw new Error("TipoCliente is in use by clients and cannot be deleted");
-
+    async deleteTipoCliente(id) {
+        try {
+           
+            await TipoClienteValidator.validateDelete(id);
             const deletedTipoCliente = await tipoClienteRepository.deleteTipoCliente(id);
             return deletedTipoCliente;
 
-        }catch(error){
-             console.error("Error on delete tipocliente in service:", error.message);
+        } catch (error) {
+            console.error("Error on delete tipocliente in service:", error.message);
             throw new Error(`Error on delete tipocliente in service: ${error.message}`);
         }
     }
