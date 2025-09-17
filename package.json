@@ -32,6 +32,7 @@
     "@routes": "src/routes",
     "@services": "src/services",
     "@validators": "src/utils/validator",
-    "@errors": "src/utils/errors"
+    "@errors": "src/utils/errors",
+    "@cors": "src/middleware"
   }
 }

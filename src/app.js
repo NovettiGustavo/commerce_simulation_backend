@@ -3,11 +3,13 @@ const express = require('express');
 const clienteRoutes = require("./routes/cliente.route")
 const vendaRoutes = require("./routes/venda.route");
 const tipoClienteRoutes = require("./routes/tipoCliente.route");
+const corsHandler = require("@cors/corsHandler");
 
 dotenv.config();
 const app = express();
 
 app.use(express.json());
+app.use(corsHandler);
 
 app.use("/clientes", clienteRoutes);
 app.use("/vendas", vendaRoutes);
