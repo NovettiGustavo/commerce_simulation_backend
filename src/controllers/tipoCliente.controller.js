@@ -1,4 +1,5 @@
 const tipoClienteService = require("@services/tipoCliente.service");
+const { ValidationError, NotFoundError } = require("@errors")
 
 class TipoClienteController {
     async getTipoClienteById(req, res) {
@@ -7,12 +8,12 @@ class TipoClienteController {
             const tipoCliente = await tipoClienteService.getTipoClienteById(Number(id));
 
             if (!tipoCliente) {
-                return res.status(404).json({ message: "tipocliente not found!" });
+                throw new NotFoundError("tipocliente not found!");
             }
 
             return res.status(200).json(tipoCliente);
         } catch (error) {
-            return res.status(500).json({ error: error.message });
+            next(error);
         }
     };
 
@@ -21,22 +22,22 @@ class TipoClienteController {
             const tipoClientes = await tipoClienteService.getAllTipoClientes();
 
             if (tipoClientes.length === 0) {
-                return res.status(404).json({ message: "tipoClientes not found!" });
+                throw new NotFoundError("tipoclientes not found!");
             }
 
             return res.status(200).json(tipoClientes)
         } catch (error) {
-            return res.status(500).json({ error: error.message })
+            next(error);
         }
 
     };
 
-    async createTipoCliente(req,res){
-        const {s_dsctipocliente_tipocliente} = req.body;
+    async createTipoCliente(req, res) {
+        const { s_dsctipocliente_tipocliente } = req.body;
 
-        try{
-            if(!s_dsctipocliente_tipocliente){
-                return res.status(400).json({message:"Description is required"})
+        try {
+            if (!s_dsctipocliente_tipocliente) {
+                throw new ValidationError("Description is required");
             }
 
             const newTipoCliente = await tipoClienteService.createTipoCliente({
@@ -44,44 +45,41 @@ class TipoClienteController {
             })
 
             return res.status(201).json(newTipoCliente)
-        }catch(error){
-            console.error("Internal server error on create tipocliente",error.message);
-            return res.status(500).json({message: error.message})
+        } catch (error) {
+            next(error);
         }
     };
 
-    async updateTipoCliente(req, res){
-        const {id} = req.params;
-        const {data} = req.body;
+    async updateTipoCliente(req, res) {
+        const { id } = req.params;
+        const { data } = req.body;
 
-        try{
-            if(!id){
-                res.status(400).json({message: "Missing ID parameter"});
+        try {
+            if (!id) {
+                throw new ValidationError("Missing ID parameter");
             }
 
-            if(!data || Object.keys(data).length === 0){
-                return res.status(400).json({message: "No data founded to update tipocliente"});
+            if (!data || Object.keys(data).length === 0) {
+                throw new ValidationError("No data founded to update tipocliente");
             }
 
-            const updatedTipoCliente = await tipoClienteService.updateTipoCliente(Number(id),data);
+            const updatedTipoCliente = await tipoClienteService.updateTipoCliente(Number(id), data);
             return res.status(200).json(updatedTipoCliente)
-        }catch(error){
-            console.error(`Error on update tipocliente in controller: ${error.message}`);
-            return res.status(500).json({message:"Internal server error"});
+        } catch (error) {
+            next(error);
         }
     };
 
-    async deleteTipoCliente(req,res){
-        const {id} = req.params;
+    async deleteTipoCliente(req, res) {
+        const { id } = req.params;
 
-        try{
-            if(!id)  return res.status(400).json({message: "ID is required param to delete a tipocliente"});
+        try {
+            if (!id) throw new ValidationError("ID is required param to delete a tipocliente");
 
             const deletedTipoCliente = await tipoClienteService.deleteTipoCliente(id);
             return res.status(200).json(deletedTipoCliente)
-        }catch(error){
-             console.error(`Error deleting venda: ${error.message}`);
-            return res.status(500).json({error:error.message})
+        } catch (error) {
+            next(error);
         }
     }
 }
