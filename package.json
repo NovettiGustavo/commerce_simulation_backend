@@ -33,6 +33,7 @@
     "@services": "src/services",
     "@validators": "src/utils/validator",
     "@errors": "src/utils/errors",
-    "@cors": "src/middleware"
+    "@cors": "src/middleware/corsHandler",
+    "internal_errors": "src/middleware/errorHandler"
   }
 }
