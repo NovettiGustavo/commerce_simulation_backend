@@ -2,7 +2,7 @@ const {appError} = require("@errors");
 
 //Verificar quais tipos de erro vão chegar e validar as possíveis falhas
 function isPrismaError(err){
-    if(!err || typeof err !== "object") return false;
+    if(!err || typeof err !== 'object') return false;
 
     if(err.code === "string" && err.code.length > 0) return true;
     if(err.code === "number" && !Number.isNaN(err.code)) return true;
